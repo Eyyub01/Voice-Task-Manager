@@ -42,7 +42,7 @@ OPENAI_API_KEY=sk-proj-...
 
 ```bash
 pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
+uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
 ### 4. Frontend
@@ -63,16 +63,17 @@ Open [http://localhost:5173](http://localhost:5173), click the mic, and start sp
 
 1. Go to [render.com](https://render.com) and create a new **Web Service**
 2. Connect your GitHub repo
-3. Render will detect `render.yaml` automatically
-4. Add environment variable: `OPENAI_API_KEY` = your key
-5. Deploy — note your service URL e.g. `https://voice-task-manager-api.onrender.com`
+3. Set **Build Command:** `pip install -r requirements.txt`
+4. Set **Start Command:** `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+5. Add environment variable: `OPENAI_API_KEY` = your key
+6. Deploy — backend URL: `https://voice-task-manager-mb76.onrender.com`
 
 ### Frontend → Vercel
 
 1. Go to [vercel.com](https://vercel.com) and import your GitHub repo
 2. Set **Root Directory** to `frontend`
-3. Add environment variable: `VITE_API_URL` = your Render backend URL
-4. Deploy
+3. Add environment variable: `VITE_API_URL` = `https://voice-task-manager-mb76.onrender.com`
+4. Deploy — frontend URL: `https://voice-task-manager-4nla.vercel.app`
 
 ---
 
@@ -87,5 +88,9 @@ Open [http://localhost:5173](http://localhost:5173), click the mic, and start sp
 | "Create three tasks: gym at 7, sync at 9, LinkedIn at 11" | All three created |
 
 ## Live Demo
+
+**[https://voice-task-manager-4nla.vercel.app](https://voice-task-manager-4nla.vercel.app)**
+
+> Note: The backend runs on Render's free tier and may take ~50 seconds to wake up on first visit.
 
 
