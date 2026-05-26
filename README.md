@@ -22,7 +22,7 @@ A voice-controlled task manager built with React + FastAPI + OpenAI Realtime API
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/voice-task-manager.git
+git clone https://github.com/Eyyub01/voice-task-manager.git
 cd voice-task-manager
 ```
 
