@@ -1,0 +1,323 @@
+/* ── Reset / base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── App shell ────────────────────────────────────────────────────────────── */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+}
+
+/* ── Header ───────────────────────────────────────────────────────────────── */
+.app__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 10;
+}
+
+.app__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-h);
+  letter-spacing: -0.3px;
+  margin: 0;
+}
+
+/* ── Status pill ──────────────────────────────────────────────────────────── */
+.status-pill {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.status-pill--connected    { background: rgba(34,197,94,0.15); color: #16a34a; }
+.status-pill--connecting   { background: rgba(234,179,8,0.15);  color: #ca8a04; }
+.status-pill--idle,
+.status-pill--disconnected,
+.status-pill--error        { background: var(--accent-bg); color: var(--accent); }
+
+/* ── Body layout ──────────────────────────────────────────────────────────── */
+.app__body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .app__body { grid-template-columns: 1fr; }
+}
+
+/* ── Voice panel ──────────────────────────────────────────────────────────── */
+.voice-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 24px 24px;
+  border-right: 1px solid var(--border);
+  gap: 24px;
+  overflow-y: auto;
+}
+
+.voice-panel__orb-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* ── Mic button ───────────────────────────────────────────────────────────── */
+.mic-btn {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow);
+  outline: none;
+}
+.mic-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: scale(1.05);
+}
+.mic-btn--active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow: 0 0 0 8px var(--accent-bg), var(--shadow);
+  animation: pulse 2s infinite;
+}
+.mic-btn--connecting {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.mic-btn:disabled { cursor: not-allowed; }
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 8px var(--accent-bg), var(--shadow); }
+  50%       { box-shadow: 0 0 0 16px transparent, var(--shadow); }
+}
+
+/* ── Waveform ─────────────────────────────────────────────────────────────── */
+.waveform {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 32px;
+}
+.waveform__bar {
+  display: block;
+  width: 4px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--border);
+  transition: background 0.2s;
+}
+.waveform--active .waveform__bar {
+  background: var(--accent);
+  animation: wave 0.8s ease-in-out infinite alternate;
+}
+.waveform__bar:nth-child(1) { animation-delay: 0s;    }
+.waveform__bar:nth-child(2) { animation-delay: 0.1s;  }
+.waveform__bar:nth-child(3) { animation-delay: 0.2s;  }
+.waveform__bar:nth-child(4) { animation-delay: 0.3s;  }
+.waveform__bar:nth-child(5) { animation-delay: 0.4s;  }
+
+@keyframes wave {
+  from { height: 6px; }
+  to   { height: 28px; }
+}
+
+.voice-panel__hint {
+  font-size: 14px;
+  color: var(--text);
+  min-height: 20px;
+  text-align: center;
+}
+
+/* ── Status message ───────────────────────────────────────────────────────── */
+.status-msg {
+  font-size: 13px;
+  color: #dc2626;
+  background: rgba(220,38,38,0.08);
+  border: 1px solid rgba(220,38,38,0.2);
+  border-radius: 8px;
+  padding: 8px 14px;
+  text-align: center;
+  max-width: 320px;
+}
+
+/* ── Transcript ───────────────────────────────────────────────────────────── */
+.transcript {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  max-height: 420px;
+  padding-right: 4px;
+}
+.transcript__empty {
+  font-size: 14px;
+  color: var(--text);
+  opacity: 0.5;
+  text-align: center;
+  padding: 24px 0;
+}
+
+/* ── Transcript bubbles ───────────────────────────────────────────────────── */
+.bubble {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 85%;
+}
+.bubble--user    { align-self: flex-end; align-items: flex-end; }
+.bubble--assistant { align-self: flex-start; align-items: flex-start; }
+
+.bubble__label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text);
+  opacity: 0.5;
+}
+.bubble__text {
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 10px 14px;
+  border-radius: 16px;
+  color: var(--text-h);
+}
+.bubble--user .bubble__text {
+  background: var(--accent);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+.bubble--assistant .bubble__text {
+  background: var(--code-bg);
+  border-bottom-left-radius: 4px;
+}
+
+/* ── Tasks panel ──────────────────────────────────────────────────────────── */
+.tasks-panel {
+  padding: 32px 24px;
+  overflow-y: auto;
+}
+.tasks-panel__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.tasks-panel__header h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-h);
+  margin: 0;
+}
+.tasks-panel__count {
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--accent-bg);
+  color: var(--accent);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+.tasks-panel__empty {
+  font-size: 14px;
+  color: var(--text);
+  opacity: 0.5;
+  text-align: center;
+  padding: 48px 0;
+}
+
+/* ── Task groups ──────────────────────────────────────────────────────────── */
+.task-group { margin-bottom: 28px; }
+.task-group__label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text);
+  opacity: 0.5;
+  margin-bottom: 10px;
+}
+
+/* ── Task cards ───────────────────────────────────────────────────────────── */
+.task-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 8px;
+  background: var(--bg);
+  transition: border-color 0.15s;
+}
+.task-card:hover { border-color: var(--accent-border); }
+.task-card--done  { opacity: 0.5; }
+.task-card--overdue { border-color: rgba(220,38,38,0.3); }
+
+.task-card__title {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-h);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.task-card__time {
+  font-size: 12px;
+  color: var(--text);
+  white-space: nowrap;
+}
+.task-card__badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+.task-card__badge--pending   { background: rgba(234,179,8,0.15); color: #ca8a04; }
+.task-card__badge--completed { background: rgba(34,197,94,0.15); color: #16a34a; }
+
+/* ── Spinner ──────────────────────────────────────────────────────────────── */
+.spin {
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Scrollbar ────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
